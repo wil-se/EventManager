@@ -1,3 +1,5 @@
-from django.shortcuts import render
+from authentication.views import main_render
 
-# Create your views here.
+
+def reservation(request):
+    return main_render(request, 'reservation.html', {})

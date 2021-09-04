@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'dashboard.apps.DashboardConfig',
     'reservation.apps.ReservationConfig',
+    'authentication.apps.AuthenticationConfig',
+    'colorfield'
 ]
 
 MIDDLEWARE = [
@@ -64,6 +66,10 @@ TEMPLATES = [
             os.path.join(BASE_DIR, 'reservation/templates'),
             os.path.join(BASE_DIR, 'sportmanager/templates/blocks'),
             os.path.join(BASE_DIR, 'sportmanager/templates/pages'),
+            os.path.join(BASE_DIR, 'reservation/templates/'),
+            os.path.join(BASE_DIR, 'telnet/templatetags'),
+
+            
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -73,6 +79,9 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
+                        'libraries':{
+                'filters': 'sportmanager.templatetags.filters',
+                }
         },
     },
 ]
@@ -95,7 +104,7 @@ DATABASES = {
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
-
+AUTH_USER_MODEL = 'authentication.User'
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -137,3 +146,6 @@ STATICFILES_DIRS = ( os.path.join('static'),)
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+MEDIA_ROOT =  os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'

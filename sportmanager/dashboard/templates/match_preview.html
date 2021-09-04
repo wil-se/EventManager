@@ -1,0 +1,27 @@
+{% load static %}
+
+<div class="col-lg-4">
+	<div class="card">
+		<div class="card-body" style="background-color: {{ theme.post_background }} ">
+			<div class="card-img-actions mb-3">
+				<img class="card-img img-fluid" style="margin-bottom: 10px; height: 150px" src="{{ match.home_team.image.url }}" alt="">
+				<img class="card-img img-fluid" style="margin-top: 10px; height: 150px" src="{{ match.outside_team.image.url }}" alt="">
+				<div class="card-img-actions-overlay card-img">
+					<a href="blog_single.html" class="btn btn-outline bg-white text-white border-white border-2 btn-icon rounded-round">
+						<i class="icon-link"></i>
+					</a>
+				</div>
+			</div>
+			<h5 class="font-weight-semibold mb-1">
+				<a href="#" class="text-default">{{ match.home_team }} vs {{ match.outside_team }}</a>
+			</h5>
+			<ul class="list-inline list-inline-dotted text-muted mb-3">
+				<li class="list-inline-item">{{ match.date }}</li>
+			</ul>
+		</div>
+		<div class="card-footer d-flex" style="background-color: {{ theme.post_footer }}">
+			{% comment %} <a href="#" class="text-default"><i class="icon-heart6 text-pink mr-2"></i> 29</a> {% endcomment %}
+			<a href="#" class="ml-auto">Apri <i class="icon-arrow-right14 ml-2"></i></a>
+		</div>
+	</div>
+</div>

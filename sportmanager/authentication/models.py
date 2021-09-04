@@ -1,13 +1,16 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from colorfield.fields import ColorField
+
 
 class User(AbstractUser):
     role_choices = (
       (0, 'admin'),
       (1, 'manager'),
+      (2, 'customer')
     )
 
-    role = models.PositiveSmallIntegerField(choices=role_choices, default=3)
+    role = models.PositiveSmallIntegerField(choices=role_choices, default=2)
     
     def __str__(self):
         if self.first_name and self.last_name:
@@ -20,4 +23,23 @@ class User(AbstractUser):
 
 
 class ThemeConfig(models.Model):
+    name = models.CharField(default='default', max_length=64)
+    user = models.ForeignKey('authentication.User', default=None, on_delete=models.SET_DEFAULT)
+    navbar = ColorField(default='#000000')
+    header = ColorField(default='#000000')
+    sidebar = ColorField(default='#000000')
+    background = ColorField(default='#000000')
+    hover = ColorField(default='#ffffff')
+    post_background = ColorField(default='#ffffff')
+    post_footer = ColorField(default='#ffffff')
+    card_header = ColorField(default='#ffffff')
+    card_body = ColorField(default='#ffffff')
     
+    
+
+    def __str__(self):
+        return f'{self.name}'
+    
+    class Meta:
+        verbose_name = 'Tema'
+        verbose_name_plural = 'Temi'

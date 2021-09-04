@@ -2,7 +2,7 @@
 {% with url_name=request.resolver_match.url_name %}
 
 <!-- Main sidebar -->
-<div class="sidebar sidebar-dark sidebar-main sidebar-expand-md" style="background-color: #192226;">
+<div class="sidebar sidebar-dark sidebar-main sidebar-expand-md" style="background-color: {{ theme.sidebar }};">
 
   <!-- Sidebar mobile toggler -->
   <div class="sidebar-mobile-toggler text-center">
@@ -38,7 +38,7 @@
         </li>
 
         <li class="nav-item">
-          <a href="/banking" class="nav-link  {% if url_name == 'banking' %}active{% endif %}">
+          <a href="/eventi" class="nav-link  {% if url_name == 'eventi' %}active{% endif %}">
             <i class="icon-calendar"></i>
             <span>
               Eventi
@@ -60,7 +60,7 @@
 
 <style>
 .sidebar-dark .nav-sidebar>.nav-item-open>.nav-link:not(.disabled), .sidebar-dark .nav-sidebar>.nav-item>.nav-link.active, .sidebar-light .card[class*=bg-]:not(.bg-light):not(.bg-white):not(.bg-transparent) .nav-sidebar>.nav-item-open>.nav-link:not(.disabled), .sidebar-light .card[class*=bg-]:not(.bg-light):not(.bg-white):not(.bg-transparent) .nav-sidebar>.nav-item>.nav-link.active {
-    background-color: #395148;
+    background-color: {{theme.hover}};
     color: #fff;
 }
 </style>

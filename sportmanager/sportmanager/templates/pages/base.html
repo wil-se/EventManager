@@ -34,7 +34,7 @@
 	<!-- /theme JS files -->
 
 </head>
-<body>
+<body style="background-color: {{ theme.background }};">
 
 	{% block navbar %}
 		{% include "main_navbar.html" %}
@@ -49,10 +49,10 @@
 
 		<!-- Main content -->
 		<div class="content-wrapper">
-			{% block header %}
+		{% block header %}
 				{% include "page_header.html" %}
 			{% endblock %}
-			
+
 			<!-- Content area -->
 			<div class="content">
 				{% block content %}

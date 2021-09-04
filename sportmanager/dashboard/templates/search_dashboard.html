@@ -1,0 +1,62 @@
+
+
+{% load static %}
+{% load filters %}
+
+
+									<div class="card" style="margin: -20px 0px 20px 0px; background-color: {{ theme.card_header }};">
+	
+<!-- Filter toolbar -->
+<div class="card-header header-elements-inline">
+								<h6 class="card-title">Filtra ricerca</h6>
+							</div>  
+<div class="navbar navbar-expand-lg navbar-light navbar-component rounded" style="width: 100%; margin-bottom: 0px; padding: 0px 0px; background-color: {{ theme.card_body }}">
+<div class="row w-100">
+
+    <div class="text-center d-lg-none w-100">
+        <button type="button" class="navbar-toggler dropdown-toggle" data-toggle="collapse"
+            data-target="#navbar-filter">
+            <i class="icon-unfold mr-2"></i>
+            Filtra ricerca
+        </button>
+    </div>
+
+    <div class="navbar-collapse collapse" id="navbar-filter" style="padding: 10px 20px 20px 40px;">
+
+        <form method="GET" action="{% url 'dashboard' %}" class="w-100 form-inline">
+
+        <div class="input-group col-md-2 d-flex flex-column">
+        	<a><b>Data:</b></a>
+        	<div style="display: flex">
+            	<span class="input-group-prepend"><span class="input-group-text"><i class="icon-calendar22"></i></span></span><input id="daterange" name="date" type="text" class="form-control">
+        	</div>
+        </div>
+
+	    <div class="input-group col-md-2 d-flex flex-column">
+            <a><b>Cerca parola:</b></a>
+				<div class="form-group-feedback form-group-feedback-right w-100">
+            {{ form.text|addclass:'form-control w-100' }}
+				</div>
+		</div>
+
+		<div class="input-group col-md-2 d-flex flex-column" >
+            <a><b>Categoria:</b></a>
+            {{ form.team|addclass:'form-control w-100' }}
+          </div>
+
+
+<div class="w-100">
+<div class="float-right">
+                    <button id="search" class="bg-teal-400 btn-primary btn" type="submit" style="margin: 20px 10px 0px; 10px"> Cerca </button>
+</div>
+</div>
+		</div>
+
+
+        </form>
+
+    </div>
+</div>
+<!-- /filter toolbar -->
+
+							</div>
