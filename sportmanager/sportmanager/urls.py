@@ -24,7 +24,9 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('django.contrib.auth.urls')),
     path('', include('dashboard.urls')),
-    path('', include('reservation.urls')),    
+    path('', include('reservation.urls')),
+    path('', include('authentication.urls')),
+    
 ]
 
 if settings.DEBUG:

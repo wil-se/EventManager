@@ -4,10 +4,10 @@
 	<div class="card">
 		<div class="card-body" style="background-color: {{ theme.post_background }} ">
 			<div class="card-img-actions mb-3">
-				<img class="card-img img-fluid" style="margin-bottom: 10px; height: 150px" src="{{ match.home_team.image.url }}" alt="">
-				<img class="card-img img-fluid" style="margin-top: 10px; height: 150px" src="{{ match.outside_team.image.url }}" alt="">
+				<img class="card-img img-fluid" style="margin-bottom: 10px; height: 200px" src="{{ match.home_team.image.url }}" alt="">
+				<img class="card-img img-fluid" style="margin-top: 10px; height: 200px" src="{{ match.outside_team.image.url }}" alt="">
 				<div class="card-img-actions-overlay card-img">
-					<a href="blog_single.html" class="btn btn-outline bg-white text-white border-white border-2 btn-icon rounded-round">
+					<a href="{% url 'partita' id=match.pk %}" class="btn btn-outline bg-white text-white border-white border-2 btn-icon rounded-round">
 						<i class="icon-link"></i>
 					</a>
 				</div>

@@ -12,3 +12,7 @@ def main_render(request, page='dashboard.html', data={}):
     return render(request, page, {**{
         'theme': themeconfig,
     }, **data})
+
+@login_required(login_url='/accounts/login/')
+def profile(request):
+    return main_render(request, page="profile.html")
