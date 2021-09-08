@@ -39,19 +39,32 @@ class Match(models.Model):
     class Meta:
         verbose_name = 'Partita'
         verbose_name_plural = 'Partite'
+    
+    def get_free_seats(self):
+        seats = Seat.objects.all()
+        reservations = Reservation.objects.filter(match=self).values_list('seat', flat=True)
+        free = []
+        for seat in seats:
+            if seat.pk not in reservations:
+                free.append(seat)
 
+        return free
+            
+        
 
 
 class Reservation(models.Model):
     user = models.ForeignKey('authentication.User', default=None, on_delete=models.SET_DEFAULT, null=True)
     match = models.ForeignKey('reservation.Match', default=None, on_delete=models.SET_DEFAULT, null=True)
+    seat = models.ForeignKey('reservation.Seat', default=None, on_delete=models.SET_DEFAULT, null=True)
 
     def __str__(self):
-        return f'{self.user.first_name} {self.user.last_name} per {self.match.date} {self.match.home_team} vs {self.match.outside_team}'    
+        return f'{self.user.first_name} {self.user.last_name} per {self.match.date} {self.match.home_team} vs {self.match.outside_team}'
     
     class Meta:
         verbose_name = 'Prenotazioni'
         verbose_name_plural = 'Prenotazioni'
+
 
 
 
@@ -60,7 +73,6 @@ class Gym(models.Model):
     address = models.CharField(max_length=64)
     longitude = models.FloatField(verbose_name='Longitudine', max_length=1, blank=True, null=True)
     latitude = models.FloatField(verbose_name='Longitudine', max_length=1, blank=True, null=True)
-    seats = models.IntegerField(verbose_name="Posti a sedere", default=0)
     
 
     def __str__(self):
@@ -69,3 +81,18 @@ class Gym(models.Model):
     class Meta:
         verbose_name = 'Palestra'
         verbose_name_plural = 'Palestre'
+
+
+class Seat(models.Model):
+    gym = models.ForeignKey('reservation.Gym', default=None, on_delete=models.SET_DEFAULT, null=True)
+    name = models.CharField(max_length=64)
+    x = models.FloatField(blank=True, null=True)
+    y = models.FloatField(blank=True, null=True)
+    
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = 'Posto a sedere'
+        verbose_name_plural = 'Posti a sedere'

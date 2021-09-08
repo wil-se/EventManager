@@ -34,6 +34,8 @@ class ThemeConfig(models.Model):
     post_footer = ColorField(default='#ffffff')
     card_header = ColorField(default='#ffffff')
     card_body = ColorField(default='#ffffff')
+    profile_image = models.ImageField(upload_to='profile_images/', default='/logo.png')
+    cover_image = models.ImageField(upload_to='cover_images/', default='/logo.png')
     
     
 

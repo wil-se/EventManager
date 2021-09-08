@@ -1,0 +1,148 @@
+{% load filters %}
+
+
+<div class="row">
+					<div class="col-md-12">
+
+						<!-- Basic -->
+						<div class="card">
+
+
+							<div class="card-body">
+								{{ seatform.seats|addclass:'form-control' }}
+                                <a id="addseat" class="btn btn-primary">Aggiungi</a>
+                                <a id="deleteseat" class="btn btn-danger">Cancella</a>
+                                <a id="save" class="btn btn-success">Salva</a>
+
+							</div>
+
+
+						</div>
+						<!-- /basic -->
+
+					</div>
+
+				</div>
+<div class="row">
+					<div class="col-md-12">
+
+						<!-- Basic -->
+						<div class="card" style="background: #ffffff; overflow-x: scroll;">
+							<div class="card-header header-elements-inline" style="background: #ffffff;">
+								<h5 class="card-title">Posti a sedere</h5>
+							</div>
+
+							<div class="card-body flex" id="draggable-default-container"  style="height:1000px; width:1600px;  background: #ffffff; margin: 0px auto;">
+								<div id="seatsbody" style="margin: 30px auto;">
+                                    <div style="height:250px; width:500px;  background: #000000; margin: auto auto;" class="jqueryui-demo-element seat draggable-element text-center mx-auto mx-sm-0 ui-draggable ui-draggable-handle">    
+								</div>
+                                
+								
+							</div>
+							</div>
+						</div>
+						<!-- /basic -->
+
+					</div>
+
+				</div>
+
+
+<script>
+
+var seats_to_save = []
+
+$('document').ready(function(){
+    console.log('ao?');
+    console.log($('#id_seats'));
+    console.log($('#id_seats')[0]);
+    var opts = $('#id_seats')[0]
+    console.log(opts)
+    for (var i=1; i < opts.length; i++) {
+        console.log(opts[i]);
+        console.log(opts[i].text);
+        console.log(opts[i].value);
+        console.log()
+        if(parseInt(i-1)%4 == 0){
+            console.log("ao")
+            $('#seatsbody').append('<div id=\"seat_row_'+parseInt((i-1)/4)+'\" class=\"row\"></div>')
+        }      
+        $('#seat_row_'+parseInt((i-1)/4)).append('<div id="seat_' + opts[i].text +'" class=\"jqueryui-demo-element seat draggable-element text-center mx-auto mx-sm-0 rounded-round ui-draggable ui-draggable-handle\" style=\"left: -15.5px; top: -25px;\"><span>' + opts[i].text + '</span></div>');
+    }
+    JqueryUiInteractions.init();
+})
+
+$('#addseat').on('click', function(){
+    console.log(seats_to_save)
+    if(!seats_to_save.includes($('#id_seats').val())){
+        seats_to_save.push($('#id_seats').val())
+        $('#seatsbody').append('<div id="seat_' + $('#id_seats').val() +'" class=\"jqueryui-demo-element seat draggable-element text-center mx-auto mx-sm-0 rounded-round ui-draggable ui-draggable-handle\" style=\"left: -15.5px; top: -25px;\"><span>'+$('#id_seats')[0][parseInt($('#id_seats').val())].text+'</span></div>');
+        JqueryUiInteractions.init();
+    }
+})
+
+
+$('#deleteseat').on('click', function(){
+    console.log($('#id_seats').val())
+    $('#seat_'+$('#id_seats').val()).remove()
+    seats_to_save = []
+})
+
+$('#save').on('click', function(){
+    console.log("saving..")
+    
+
+    $.ajax({
+        headers: {'X-CSRFToken': '{{ csrf_token }}'},
+        type: "POST",
+        url: "/save-seats",
+        data: {},
+        success: function(data){
+            console.log('success');
+        },
+        failure: function(data){
+            console.log("FAIL");
+            console.log(data);
+        },
+    });
+
+
+})
+
+
+
+
+
+</script>
+
+<style>
+.seat {
+    background-color: #fafafa;
+    border: 2px dashed #ddd;
+    color: #777;
+    position: relative;
+    z-index: 10;
+    width: 50px;
+    height: 50px;
+    
+}
+</style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
