@@ -85,10 +85,7 @@ class Gym(models.Model):
 
 class Seat(models.Model):
     gym = models.ForeignKey('reservation.Gym', default=None, on_delete=models.SET_DEFAULT, null=True)
-    name = models.CharField(max_length=64)
-    x = models.FloatField(blank=True, null=True)
-    y = models.FloatField(blank=True, null=True)
-    
+    name = models.CharField(max_length=64, unique=True)
 
     def __str__(self):
         return self.name
@@ -96,3 +93,14 @@ class Seat(models.Model):
     class Meta:
         verbose_name = 'Posto a sedere'
         verbose_name_plural = 'Posti a sedere'
+
+
+class SeatGymConfig(models.Model):
+    gym = models.ForeignKey('authentication.GymConfig', default=None, on_delete=models.SET_DEFAULT, null=True)
+    seat = models.ForeignKey('reservation.Seat', default=None, on_delete=models.SET_DEFAULT, null=True)
+    top = models.IntegerField(default=69)
+    left = models.IntegerField(default=69)
+
+    def __str__(self):
+        return self.seat.name + " " + self.gym.name
+    

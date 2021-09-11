@@ -14079,7 +14079,7 @@ a.fc-more {
   background-color: #fafafa;
   border: 2px dashed #ddd;
   color: #777;
-  position: relative;
+  position: absolute;
   z-index: 10;
   width: 90px;
   height: 90px; }

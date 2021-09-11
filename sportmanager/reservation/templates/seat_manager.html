@@ -9,11 +9,24 @@
 
 
 							<div class="card-body">
-								{{ seatform.seats|addclass:'form-control' }}
-                                <a id="addseat" class="btn btn-primary">Aggiungi</a>
-                                <a id="deleteseat" class="btn btn-danger">Cancella</a>
-                                <a id="save" class="btn btn-success">Salva</a>
-
+                                <div>
+							    	{{ seatform.seats|addclass:'form-control' }}
+                                    <a id="addseat" class="btn btn-primary">Aggiungi</a>
+                                    <a id="deleteseat" class="btn btn-danger">Cancella</a>
+                                    <a id="save" class="btn btn-success">Salva</a>
+                                </div>
+                                <div>
+                                    <h4>larghezza spazio</h4>
+                                    {{ seatform.width_space|addclass:'form-control' }}
+                                    <h4>altezza spazio</h4>
+                                    {{ seatform.height_space|addclass:'form-control' }}
+                                    <h4>dimensione posto</h4> 
+                                    {{ seatform.seat_radius|addclass:'form-control' }}
+                                    <h4>larghezza campo</h4>
+                                    {{ seatform.width_field|addclass:'form-control' }}
+                                    <h4>altezza campo</h4>
+                                    {{ seatform.height_field|addclass:'form-control' }}
+                                </div>
 							</div>
 
 
@@ -32,10 +45,8 @@
 								<h5 class="card-title">Posti a sedere</h5>
 							</div>
 
-							<div class="card-body flex" id="draggable-default-container"  style="height:1000px; width:1600px;  background: #ffffff; margin: 0px auto;">
-								<div id="seatsbody" style="margin: 30px auto;">
-                                    <div style="height:250px; width:500px;  background: #000000; margin: auto auto;" class="jqueryui-demo-element seat draggable-element text-center mx-auto mx-sm-0 ui-draggable ui-draggable-handle">    
-								</div>
+							<div class="card-body flex" id="draggable-default-container"  style="background: #ffffff; margin: 0px auto;">
+                                    <div id="field" style="background: #000000; margin: auto auto;" class="jqueryui-demo-element draggable-element text-center mx-auto mx-sm-0 ui-draggable ui-draggable-handle">    
                                 
 								
 							</div>
@@ -53,50 +64,90 @@
 var seats_to_save = []
 
 $('document').ready(function(){
-    console.log('ao?');
-    console.log($('#id_seats'));
-    console.log($('#id_seats')[0]);
+
     var opts = $('#id_seats')[0]
-    console.log(opts)
     for (var i=1; i < opts.length; i++) {
-        console.log(opts[i]);
-        console.log(opts[i].text);
-        console.log(opts[i].value);
-        console.log()
-        if(parseInt(i-1)%4 == 0){
-            console.log("ao")
-            $('#seatsbody').append('<div id=\"seat_row_'+parseInt((i-1)/4)+'\" class=\"row\"></div>')
-        }      
-        $('#seat_row_'+parseInt((i-1)/4)).append('<div id="seat_' + opts[i].text +'" class=\"jqueryui-demo-element seat draggable-element text-center mx-auto mx-sm-0 rounded-round ui-draggable ui-draggable-handle\" style=\"left: -15.5px; top: -25px;\"><span>' + opts[i].text + '</span></div>');
+        // console.log(opts[i].text);
+        $('#draggable-default-container').append('<div id="seat_' + opts[i].text +'" class=\"jqueryui-demo-element seat draggable-element text-center mx-auto mx-sm-0 rounded-round ui-draggable ui-draggable-handle\"><span>' + opts[i].text + '</span></div>');
     }
+
+
+    $.ajax({
+        headers: {'X-CSRFToken': '{{ csrf_token }}'},
+        type: "GET",
+        url: "/get-gym-config",
+        data: {},
+        success: function(data){ 
+            // console.log(data);
+            $('#id_width_space').val(data['width_space'])
+            $('#id_height_space').val(data['height_space'])
+            $('#id_width_field').val(data['width_field'])
+            $('#id_height_field').val(data['height_field'])
+            $('#id_seat_radius').val(data['seat_radius'])
+            document.getElementById('draggable-default-container').setAttribute("style","width:"+data['width_space']+"px; height: "+data['height_space']+"px; position: relative; padding: 0px 0px;");
+            document.getElementById('field').setAttribute("style","width:"+data['width_field']+"px; height: "+data['height_field']+"px; background: black; left: "+data['left_field']+"px; top: "+data['top_field']+"px; position: absolute;");
+            console.log(data['width_field']);
+            console.log(data['height_field']);
+            
+            var seats = data['seats'];
+            for (const [key, value] of Object.entries(seats)) {
+                console.log(key, value);
+                document.getElementById('seat_'+key).setAttribute("style","width:"+data['seat_radius']+"px; height: "+data['seat_radius']+"px; left: "+value[0]+"px; top: "+value[1]+"px; position: absolute;");
+            }
+
+        },
+        failure: function(data){
+            console.log("FAIL");
+        },
+    });
+
+    $('#field').resizable();
+
     JqueryUiInteractions.init();
 })
 
 $('#addseat').on('click', function(){
-    console.log(seats_to_save)
-    if(!seats_to_save.includes($('#id_seats').val())){
-        seats_to_save.push($('#id_seats').val())
-        $('#seatsbody').append('<div id="seat_' + $('#id_seats').val() +'" class=\"jqueryui-demo-element seat draggable-element text-center mx-auto mx-sm-0 rounded-round ui-draggable ui-draggable-handle\" style=\"left: -15.5px; top: -25px;\"><span>'+$('#id_seats')[0][parseInt($('#id_seats').val())].text+'</span></div>');
-        JqueryUiInteractions.init();
-    }
+    $('#draggable-default-container').append('<div id=\"seat_' + $('#id_seats :selected').text() +'\" class=\"jqueryui-demo-element seat draggable-element text-center mx-auto mx-sm-0 rounded-round ui-draggable ui-draggable-handle\" style=\"left: -15.5px; top: -25px;\"><span>'+$('#id_seats :selected').text()+'</span></div>');
+    JqueryUiInteractions.init();
 })
 
 
 $('#deleteseat').on('click', function(){
-    console.log($('#id_seats').val())
     $('#seat_'+$('#id_seats').val()).remove()
     seats_to_save = []
 })
 
 $('#save').on('click', function(){
-    console.log("saving..")
+
+    data = {
+            'width_space': $('#id_width_space').val(),
+            'height_space': $('#id_height_space').val(),
+
+            'width_field': $('#field').width(),
+            'height_field': $('#field').height(),
+
+            'left_field': $('#field').position().left,
+            'top_field': $('#field').position().top,
+            'seat_radius': $('#id_seat_radius').val(),
+            'seats': {},
+        }
     
 
+    
+
+    var opts = $('#id_seats')[0]
+    for (var i=1; i < opts.length; i++) {
+        data['seats'][opts[i].value] = [$('#seat_'+opts[i].text).position().left, $('#seat_'+opts[i].text).position().top];
+    }
+    
+    console.log(data);
+    
     $.ajax({
         headers: {'X-CSRFToken': '{{ csrf_token }}'},
         type: "POST",
-        url: "/save-seats",
-        data: {},
+        url: "/set-gym-config",
+        dataType: "json",
+        data: JSON.stringify(data),
         success: function(data){
             console.log('success');
         },
@@ -116,6 +167,24 @@ $('#save').on('click', function(){
 </script>
 
 <style>
+
+
+.jqueryui-demo-element {
+        background-color: grey;
+        border: black;
+        color: black;
+        position: absolute;
+        z-index: 10;
+
+        > span {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            transform: translateY(-50%);
+        }
+    }
+
 .seat {
     background-color: #fafafa;
     border: 2px dashed #ddd;

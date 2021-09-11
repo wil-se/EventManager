@@ -45,3 +45,24 @@ class ThemeConfig(models.Model):
     class Meta:
         verbose_name = 'Tema'
         verbose_name_plural = 'Temi'
+
+
+class GymConfig(models.Model):
+    name = models.CharField(default='default', max_length=64)
+    gym = models.ForeignKey('reservation.Gym', default=None, on_delete=models.SET_DEFAULT)
+    width_field = models.IntegerField(default=400)
+    height_field = models.IntegerField(default=200)
+    width_space = models.IntegerField(default=1200)
+    height_space = models.IntegerField(default=600)
+    seat_radius = models.IntegerField(default=60)
+
+    top_field = models.IntegerField(default=100)
+    left_field = models.IntegerField(default=100)
+
+
+    def __str__(self):
+        return f'{self.name}'
+    
+    class Meta:
+        verbose_name = 'Configurazione palestra'
+        verbose_name_plural = 'Configurazioni palestre'
