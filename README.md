@@ -1,2 +1,2 @@
-# SportManager
-SportManager
+# EventManager
+EventManager
