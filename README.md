@@ -3,7 +3,7 @@
 # very raw db scheme
 "has" has to be intended as the direction of the foreign key, for example:
 if A-(0,N)-B then B has a foreign key versus A inside the database
-https://shorturl.at/awBR5
+https://shorturl.at/ktH26
 
 ## Install
 
