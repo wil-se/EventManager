@@ -22,10 +22,6 @@
                                     {{ seatform.height_space|addclass:'form-control' }}
                                     <h4>dimensione posto</h4> 
                                     {{ seatform.seat_radius|addclass:'form-control' }}
-                                    <h4>larghezza campo</h4>
-                                    {{ seatform.width_field|addclass:'form-control' }}
-                                    <h4>altezza campo</h4>
-                                    {{ seatform.height_field|addclass:'form-control' }}
                                 </div>
 							</div>
 
@@ -45,8 +41,8 @@
 								<h5 class="card-title">Posti a sedere</h5>
 							</div>
 
-							<div class="card-body flex" id="draggable-default-container"  style="background: #ffffff; margin: 0px auto;">
-                                    <div id="field" style="background: #000000; margin: auto auto;" class="jqueryui-demo-element draggable-element text-center mx-auto mx-sm-0 ui-draggable ui-draggable-handle">    
+							<div class="card-body flex" id="draggable-default-container"  style="background: #ffffff;">
+                                    <div id="field" style="background: #000000; margin: auto auto;" class="jqueryui-demo-element seat draggable-element text-center mx-auto mx-sm-0 ui-draggable ui-draggable-handle">    
                                 
 								
 							</div>
@@ -170,20 +166,12 @@ $('#save').on('click', function(){
 
 
 .jqueryui-demo-element {
-        background-color: grey;
-        border: black;
-        color: black;
-        position: absolute;
-        z-index: 10;
-
-        > span {
-            position: absolute;
-            top: 50%;
-            left: 0;
-            right: 0;
-            transform: translateY(-50%);
-        }
-    }
+    background-color: grey;
+    border: black;
+    color: black;
+    position: absolute;
+    z-index: 10;
+}
 
 .seat {
     background-color: #fafafa;

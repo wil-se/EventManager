@@ -5,10 +5,9 @@ from .views import *
 from django.shortcuts import redirect
 
 urlpatterns = [
-    path('eventi', reservation, name='eventi'),
-    path('partita/<int:id>', match, name='partita'),
-    path('partita/<int:id>/prenotazione', reserve_match, name='prenotazione_partita'),
-    path('partita/effettua-prenotazione', save_reservation, name='effettua_prenotazione_partita'),
-    path('save-seats', save_seats, name='save_seats'),
+    # path('eventi', reservation, name='eventi'),
+    # path('partita/<int:id>/prenotazione', reserve_match, name='prenotazione_partita'),
+    # path('partita/effettua-prenotazione', save_reservation, name='effettua_prenotazione_partita'),
+    # path('get-seats', get_seats, name='get_seats'),
     
 ]

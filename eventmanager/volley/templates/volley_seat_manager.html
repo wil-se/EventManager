@@ -1,0 +1,198 @@
+{% load filters %}
+
+
+<div class="row">
+					<div class="col-md-12">
+
+						<!-- Basic -->
+						<div class="card">
+
+
+							<div class="card-body">
+                                <div>
+                                    {{ seatform.canvases|addclass:'form-control' }}
+                                    {{ seatform.canvas_width|addclass:'form-control' }}
+                                    {{ seatform.canvas_height|addclass:'form-control' }}
+                                    {{ seatform.seats|addclass:'form-control' }}
+                                    {{ seatform.shapes|addclass:'form-control' }}
+                                    
+                                    <a id="save" class="btn btn-success">Salva</a>
+                                </div>
+							</div>
+
+
+						</div>
+						<!-- /basic -->
+
+					</div>
+
+				</div>
+<div class="row">
+					<div class="col-md-12">
+
+						<!-- Basic -->
+						<div class="card" style="background: #ffffff; overflow-x: scroll;">
+							<div class="card-header header-elements-inline" style="background: #ffffff;">
+								<h5 class="card-title">Posti a sedere</h5>
+							</div>
+
+							<div class="card-body flex" id="draggable-default-container"  style="background: #ffffff;">
+                                    {% comment %} <div id="field" style="background: #000000; margin: auto auto;" class="jqueryui-demo-element seat draggable-element text-center mx-auto mx-sm-0 ui-draggable ui-draggable-handle">     {% endcomment %}
+                                
+								
+							</div>
+							</div>
+						</div>
+						<!-- /basic -->
+
+					</div>
+
+				</div>
+
+
+<script>
+
+var seats_to_save = []
+
+$('document').ready(function(){
+
+    var seats = $('#id_seats')[0]
+    for (var i=1; i < seats.length; i++) {
+        $('#draggable-default-container').append('<div id="seat_' + seats[i].value +'" class=\"jqueryui-demo-element seat draggable-element text-center mx-auto mx-sm-0 rounded-round ui-draggable ui-draggable-handle\"><span>' + seats[i].text + '</span></div>');
+    }
+
+    var shapes = $('#id_shapes')[0]
+    for (var i=1; i < shapes.length; i++) {
+        $('#draggable-default-container').append('<div id="shape_' + shapes[i].value +'" class=\"jqueryui-demo-element draggable-element text-center mx-auto mx-sm-0 ui-draggable ui-draggable-handle\"><span>' + shapes[i].text + '</span></div>');
+        $('#shape_'+shapes[i].value).resizable();
+    }
+
+
+    $.ajax({
+        headers: {'X-CSRFToken': '{{ csrf_token }}'},
+        type: "GET",
+        url: "/get-canvas-config",
+        data: {},
+        success: function(data){ 
+            // console.log(data);
+            $('#id_width_space').val(data['canvas_width'])
+            $('#id_height_space').val(data['canvas_height'])
+            $('#id_seat_radius').val(data['seat_radius'])
+            document.getElementById('draggable-default-container').setAttribute("style","width:"+data['canvas_width']+"px; height: "+data['canvas_height']+"px; position: relative; padding: 0px 0px;");
+            // document.getElementById('field').setAttribute("style","width:"+data['width_field']+"px; height: "+data['height_field']+"px; background: black; left: "+data['left_field']+"px; top: "+data['top_field']+"px; position: absolute;");
+            
+            var seats = data['seats'];
+            for (const [key, value] of Object.entries(seats)) {
+                console.log(key, value);
+                document.getElementById('seat_'+key).setAttribute("style","width:"+value[2]+"px; height: "+value[2]+"px; left: "+value[0]+"px; top: "+value[1]+"px; position: absolute;");
+            }
+
+            var shapes = data['shapes'];
+            for (const [key, value] of Object.entries(shapes)) {
+                console.log(key, value);
+                document.getElementById('shape_'+key).setAttribute("style","width:"+value[2]+"px; height: "+value[3]+"px; left: "+value[0]+"px; top: "+value[1]+"px; position: absolute; background: #00000047; z-index: 9;");
+            }
+
+
+        },
+        failure: function(data){
+            console.log("FAIL");
+        },
+    });
+
+    JqueryUiInteractions.init();
+})
+
+
+$('#save').on('click', function(){
+
+    data = {
+            'canvas_width': $('#id_canvas_width').val(),
+            'canvas_height': $('#id_canvas_height').val(),
+            'canvas_id': $('#id_canvases option:selected').val(),
+            'seats': {},
+            'shapes': {},
+        }
+    
+
+    
+
+    var seats = $('#id_seats')[0]
+    for (var i=1; i < seats.length; i++) {
+        data['seats'][seats[i].value] = [$('#seat_'+seats[i].value).position().left, $('#seat_'+seats[i].value).position().top];
+    }
+
+    var shapes = $('#id_shapes')[0]
+    for (var i=1; i < shapes.length; i++) {
+        data['shapes'][shapes[i].value] = [$('#shape_'+shapes[i].value).position().left, $('#shape_'+shapes[i].value).position().top, $('#shape_'+shapes[i].value).width(), $('#shape_'+shapes[i].value).height()];
+    }
+
+    
+    
+    console.log(data);
+    
+    $.ajax({
+        headers: {'X-CSRFToken': '{{ csrf_token }}'},
+        type: "POST",
+        url: "/set-canvas-config",
+        dataType: "json",
+        data: JSON.stringify(data),
+        success: function(data){
+            console.log('success');
+        },
+        failure: function(data){
+            console.log("FAIL");
+            console.log(data);
+        },
+    });
+
+
+})
+
+
+
+
+
+</script>
+
+<style>
+
+
+.jqueryui-demo-element {
+    background-color: grey;
+    border: black;
+    color: black;
+    position: absolute;
+    z-index: 10;
+}
+
+.seat {
+    background-color: #fafafa;
+    border: 2px dashed #ddd;
+    color: #777;
+    position: relative;
+    z-index: 10;
+    width: 50px;
+    height: 50px;
+    
+}
+</style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

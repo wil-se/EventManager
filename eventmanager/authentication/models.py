@@ -3,15 +3,17 @@ from django.contrib.auth.models import AbstractUser
 from colorfield.fields import ColorField
 
 
-class User(AbstractUser):
-    role_choices = (
+role_choices = (
       (0, 'admin'),
       (1, 'manager'),
-      (2, 'customer')
+      (2, 'customer'),
+      (3, 'volleymanager'),
+      (3, 'volleycoach'),
     )
 
-    role = models.PositiveSmallIntegerField(choices=role_choices, default=2)
-    
+
+class User(AbstractUser):
+    role = models.PositiveSmallIntegerField(choices=role_choices, default=2)    
     def __str__(self):
         if self.first_name and self.last_name:
             return '{} {}'.format(self.first_name, self.last_name)
@@ -22,9 +24,38 @@ class User(AbstractUser):
         verbose_name_plural = 'Utenti'
 
 
+class Customer(User):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args,**kwargs)
+        self.role = 2
+    def __str__(self):
+        if self.first_name and self.last_name:
+            return '{} {}'.format(self.first_name, self.last_name)
+        return self.email
+
+    class Meta:
+        verbose_name = 'Cliente'
+        verbose_name_plural = 'Clienti'
+
+
+class Manager(User):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args,**kwargs)
+        self.role = 1
+
+    def __str__(self):
+        if self.first_name and self.last_name:
+            return '{} {}'.format(self.first_name, self.last_name)
+        return self.email
+
+    class Meta:
+        verbose_name = 'Manager'
+        verbose_name_plural = 'Manager'
+
+
 class ThemeConfig(models.Model):
     name = models.CharField(default='default', max_length=64)
-    user = models.ForeignKey('authentication.User', default=None, on_delete=models.SET_DEFAULT)
+    user = models.ForeignKey('authentication.User', default=None, on_delete=models.SET_DEFAULT, blank=True, null=True)
     navbar = ColorField(default='#000000')
     header = ColorField(default='#000000')
     sidebar = ColorField(default='#000000')
@@ -46,7 +77,7 @@ class ThemeConfig(models.Model):
         verbose_name = 'Tema'
         verbose_name_plural = 'Temi'
 
-
+"""
 class GymConfig(models.Model):
     name = models.CharField(default='default', max_length=64)
     gym = models.ForeignKey('reservation.Gym', default=None, on_delete=models.SET_DEFAULT)
@@ -66,3 +97,4 @@ class GymConfig(models.Model):
     class Meta:
         verbose_name = 'Configurazione palestra'
         verbose_name_plural = 'Configurazioni palestre'
+"""

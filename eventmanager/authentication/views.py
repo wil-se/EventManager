@@ -1,9 +1,126 @@
 from django.shortcuts import render
 from django.http import JsonResponse
-
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
+from authentication.models import ThemeConfig
+from reservation.models import *
+from volley.models import *
+from reservation.forms import SeatForm
+import json
 
+
+@login_required(login_url='/accounts/login/')
+def main_render(request, page='overview.html', data={}):
+    themeconfig = ThemeConfig.objects.filter(user=request.user)[0]
+    return render(request, page, {**{
+        'theme': themeconfig,
+    }, **data})
+
+
+@login_required(login_url='/accounts/login/')
+def profile(request):
+    
+    
+    return render_volley_manager_profile(request)
+    
+
+
+@login_required(login_url='/accounts/login/')
+def render_volley_manager_profile(request):
+    gymconfig = VolleyGymConf.objects.all().first()
+    reservations = VolleyReservation.objects.all()
+    canvas = gymconfig.get_canvases().first()
+
+    seatform = SeatForm(initial={
+        'canvas_width': canvas.width,
+        'canvas_height': canvas.height,
+        'canvases': canvas,
+    })
+    
+    return main_render(request, page="profile.html", data={
+        'seatform': seatform,
+        'gymconfig': gymconfig,
+        'reservations': reservations
+    })
+
+
+@login_required(login_url='/accounts/login/')
+def get_canvas_config(request):
+    place = Place.objects.filter(manager__pk=request.user).first()
+    placeconfig = PlaceConfig.objects.filter(place=place).first()
+    canvas = Canvas.objects.filter(placeconfig=placeconfig).first()
+
+    seatconfig = SeatCanvasConfig.objects.filter(canvas=canvas)
+    
+    shapes = Shape.objects.filter(canvas=canvas)
+
+
+    data = {
+        'seats': {},
+        'shapes': {},
+    }
+
+    data['canvas_width'] = canvas.width
+    data['canvas_height'] = canvas.height
+
+    for seat in seatconfig:
+        print(seat.pk)
+        print(seat)
+        data['seats'][seat.seat.pk] = [seat.left, seat.top, seat.seat.radius]
+
+
+    for shape in shapes:
+        data['shapes'][shape.pk] = [shape.left, shape.top, shape.width, shape.height]
+
+    print(data)
+
+
+    return JsonResponse(data)
+
+
+
+
+@login_required(login_url='/accounts/login/')
+def set_canvas_config(request):
+    data = json.loads(list(request.POST.keys())[0])
+    canvas_width = data.get('canvas_width', None)
+    canvas_height = data.get('canvas_height', None)
+    canvas_id = data.get('canvas_id', None)
+    seats = data.get('seats', None)
+    shapes = data.get('shapes', None)
+
+    canvas = Canvas.objects.get(pk=canvas_id)
+    canvas.height = canvas_height
+    canvas.width = canvas_width
+    canvas.save()
+    
+    for seat in seats:
+        try:
+            seatcanvasconf = SeatCanvasConfig.objects.get(canvas=canvas, seat=seat)
+            seatcanvasconf.left = seats[seat][0]
+            seatcanvasconf.top = seats[seat][1]
+            seatcanvasconf.save()
+        except:
+            seatcanvasconf = SeatCanvasConfig()
+            seatcanvasconf.canvas = canvas
+            seatcanvasconf.seat = Seat.objects.get(pk=seat)
+            seatcanvasconf.left = seats[seat][0]
+            seatcanvasconf.top = seats[seat][1]
+            seatcanvasconf.save()
+
+    for s in shapes:
+        shape = Shape.objects.get(pk=s)
+        shape.left = shapes[s][0]
+        shape.top = shapes[s][1]
+        shape.width = shapes[s][2]
+        shape.height = shapes[s][3]
+        shape.save()
+
+
+    return JsonResponse({})
+
+
+"""
 from .models import ThemeConfig, GymConfig
 from reservation.models import Reservation, SeatGymConfig, Seat
 from reservation.forms import SeatForm
@@ -11,13 +128,6 @@ from reservation.forms import SeatForm
 import json
 
 
-@login_required(login_url='/accounts/login/')
-def main_render(request, page='dashboard.html', data={}):
-    themeconfig = ThemeConfig.objects.filter(user=request.user)[0]
-    print(themeconfig.navbar)
-    return render(request, page, {**{
-        'theme': themeconfig,
-    }, **data})
 
 @login_required(login_url='/accounts/login/')
 def profile(request):
@@ -87,3 +197,4 @@ def set_gym_config(request):
         seatconf.save()
         
     return JsonResponse({})
+"""

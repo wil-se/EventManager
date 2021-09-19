@@ -1,12 +1,7 @@
 from authentication.views import main_render
-from .models import Match, Reservation
-from django.http import JsonResponse
 from django.http import HttpResponse
-from authentication.models import GymConfig
-from reservation.models import SeatGymConfig
 
-
-
+"""
 def reservation(request):
     return main_render(request, 'reservation.html', {})
 
@@ -30,7 +25,9 @@ def reserve_match(request, id):
     seatconfig = SeatGymConfig.objects.filter(gym=gymconfig)
 
 
-    data = {'seats':{}}
+    seats = {}
+    for seat in seatconfig:
+       seats[seat.seat.name] = [seat.left, seat.top]
     
     return main_render(request, 'reserve_match.html', {
         'match':match,
@@ -42,6 +39,7 @@ def reserve_match(request, id):
         'seat_radius' : gymconfig.seat_radius,
         'left_field' : gymconfig.left_field,
         'top_field' : gymconfig.top_field,
+        'seats': seats,
         })
 
 def save_reservation(request):
@@ -70,8 +68,19 @@ def save_reservation(request):
         'free_seats': free_seats,
         })
 
-def save_seats(request):
+
+def get_seats(request):
+    match_id = request.GET.get('match_id', None)
+    match = Match.objects.get(pk=match_id)
+    reservations = Reservation.objects.filter(match=match)
+    gymconfig = GymConfig.objects.all().first()
+    seatconfig = SeatGymConfig.objects.filter(gym=gymconfig)
     
-    return main_render(request, 'profile.html', {
-        })
+
+    data = {}
+    data['seats'] = {}
+
+    return JsonResponse(data)
+
+"""
 

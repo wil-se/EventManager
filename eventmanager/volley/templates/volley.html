@@ -13,7 +13,7 @@
 
 			<!-- Content area -->
 			<div class="content" style="padding: 0px">
-			{% include 'search_dashboard.html' %}
+			{% include 'search_volley.html' with form=form %}
 
 				<!-- Inner container -->
 				<div class="d-md-flex align-items-md-start">
@@ -36,7 +36,7 @@
               <div class="row">
               {% for match in matches %}
 
-                    {% include 'match_preview.html' with mtach=match theme=theme %}
+                    {% include 'volley_match_preview.html' with match=match theme=theme %}
 
                   {% if forloop.counter|divisibleby:3 %}
               </div>
@@ -61,20 +61,6 @@
 
 
 
-
-						<!-- Pagination -->
-						<div class="d-flex justify-content-center mt-3 mb-3">
-							<ul class="pagination">
-								<li class="page-item"><a href="#" class="page-link"><i class="icon-arrow-left12"></i></a></li>
-								<li class="page-item active"><a href="#" class="page-link">1</a></li>
-								<li class="page-item"><a href="#" class="page-link">2</a></li>
-								<li class="page-item"><a href="#" class="page-link">3</a></li>
-								<li class="page-item"><a href="#" class="page-link">4</a></li>
-								<li class="page-item"><a href="#" class="page-link">5</a></li>
-								<li class="page-item"><a href="#" class="page-link"><i class="icon-arrow-right13"></i></a></li>
-							</ul>
-						</div>
-						<!-- /pagination -->
 
 					</div>
 					<!-- /right content -->

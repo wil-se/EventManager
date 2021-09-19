@@ -5,6 +5,7 @@ from .views import *
 from django.shortcuts import redirect
 
 urlpatterns = [
-    path('overview', overview, name='overview'),
-    path('', overview, name='overview'),
+    path('volley', volley, name='volley'),
+    path('volley-match/<int:id>', volley_match, name='volley_match'),
+    
 ]

@@ -29,7 +29,7 @@
         <!-- Main -->
         <li class="nav-item-header"><div class="text-uppercase font-size-xs line-height-xs">Menù</div> <i class="icon-menu" title="Main"></i></li>
         <li class="nav-item">
-          <a href="/profilo" class="nav-link  {% if url_name == 'profilo' %}active{% endif %}">
+          <a href="/profilo" class="nav-link  {% if url_name == 'profile' %}active{% endif %}">
             <i class="icon-user"></i>
             <span>
               Profilo
@@ -37,20 +37,20 @@
           </a>
         </li>
 
-        <li class="nav-item">
-          <a href="/dashboard" class="nav-link  {% if url_name == 'dashboard' %}active{% endif %}">
-            <i class="icon-home4"></i>
-            <span>
-              Dashboard
-            </span>
-          </a>
-        </li>
+        <li class="nav-item nav-item-submenu">
+							<a href="" class="nav-link"><i class="icon-home4"></i> <span>Dashboard</span></a>
+
+							<ul class="nav nav-group-sub" data-submenu-title="Layouts">
+								<li class="nav-item"><a href="{% url 'overview' %}" class="{% if url_name == 'overview' %}active{% endif %} nav-link">Overview</a></li>
+								<li class="nav-item"><a href="{% url 'volley' %}" class="{% if url_name == 'volley' %}active{% endif %} nav-link">Volley</a></li>
+							</ul>
+				</li>
 
         <li class="nav-item">
           <a href="/eventi" class="nav-link  {% if url_name == 'eventi' or url_name == 'partita' %}active{% endif %}">
             <i class="icon-calendar"></i>
             <span>
-              Eventi
+              Prenotazioni
             </span>
           </a>
         </li>

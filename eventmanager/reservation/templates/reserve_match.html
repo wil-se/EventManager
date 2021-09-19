@@ -55,6 +55,26 @@
 
 $('document').ready(function(){
 
+    // var opts = $('#id_seats')[0]
+    // for (var i=1; i < opts.length; i++) {
+    //     $('#draggable-default-container').append('<div id="seat_' + opts[i].text +'" class=\"jqueryui-demo-element seat draggable-element text-center mx-auto mx-sm-0 rounded-round ui-draggable ui-draggable-handle\"><span>' + opts[i].text + '</span></div>');
+    // }
+
+    $.ajax({
+        headers: {'X-CSRFToken': '{{ csrf_token }}'},
+        type: "GET",
+        url: "/get-seats",
+        data: {},
+        success: function(data){
+            console.log(data)
+            
+        },
+        failure: function(data){
+            console.log("FAIL");
+        },
+    });
+
+
     $.ajax({
         headers: {'X-CSRFToken': '{{ csrf_token }}'},
         type: "GET",
@@ -70,7 +90,7 @@ $('document').ready(function(){
             var seats = data['seats'];
             for (const [key, value] of Object.entries(seats)) {
                 console.log(key, value);
-                document.getElementById('seat_'+key).setAttribute("style","width:"+data['seat_radius']+"px; height: "+data['seat_radius']+"px; left: "+value[0]+"px; top: "+value[1]+"px; position: absolute;");
+                // document.getElementById('seat_'+key).setAttribute("style","width:"+data['seat_radius']+"px; height: "+data['seat_radius']+"px; left: "+value[0]+"px; top: "+value[1]+"px; position: absolute;");
             }
 
         },

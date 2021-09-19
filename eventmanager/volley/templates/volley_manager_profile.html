@@ -1,0 +1,359 @@
+
+				<!-- Profile navigation -->
+				<div class="navbar navbar-expand-lg navbar-light bg-light">
+					<div class="text-center d-lg-none w-100">
+						<button type="button" class="navbar-toggler dropdown-toggle" data-toggle="collapse" data-target="#navbar-second">
+							<i class="icon-menu7 mr-2"></i>
+							Schede
+						</button>
+					</div>
+
+					<div class="navbar-collapse collapse" id="navbar-second">
+						<ul class="nav navbar-nav">
+							<li class="nav-item">
+								<a href="#activity" class="navbar-nav-link active" data-toggle="tab">
+									<i class="icon-calendar3 mr-2"></i>
+									Prenotazioni
+								</a>
+							</li>
+                            <li class="nav-item">
+								<a href="#gym" class="navbar-nav-link" data-toggle="tab">
+									<i class="icon-square mr-2"></i>
+									Palestra
+								</a>
+							</li>
+                            							<li class="nav-item">
+								<a href="#schedule" class="navbar-nav-link" data-toggle="tab">
+									<i class="icon-brush mr-2"></i>
+									Tema
+								</a>
+							</li>
+							<li class="nav-item">
+								<a href="#settings" class="navbar-nav-link" data-toggle="tab">
+									<i class="icon-cog3 mr-2"></i>
+									Impostazioni
+								</a>
+							</li>
+						</ul>
+
+					</div>
+				</div>
+				<!-- /profile navigation -->
+
+
+			<!-- Content area -->
+			<div class="content">
+
+				<!-- Inner container -->
+				<div class="row">
+
+					<!-- Left content -->
+					<div class="tab-content w-100">
+						<div class="tab-pane fade active show" id="activity">
+
+{% for reservation in reservations %}
+							<!-- Sales stats -->
+							<div class="card">
+								<div class="card-header header-elements-sm-inline">
+									<h6 class="card-title">{{ reservation }}</h6>
+								</div>
+
+							</div>
+							<!-- /sales stats -->
+
+{% endfor %}
+
+					    </div>
+
+					    <div class="tab-pane fade" id="schedule">
+
+				    		<!-- Available hours -->
+							<div class="card">
+								<div class="card-header header-elements-inline">
+									<h6 class="card-title">Available hours</h6>
+									<div class="header-elements">
+									
+				                	</div>
+								</div>
+
+								<div class="card-body">
+								
+								</div>
+							</div>
+							<!-- /available hours -->
+
+
+				    	</div>
+
+                        <div class="tab-pane fade" id="gym">
+                        <div class="card-body">
+								<ul class="nav nav-tabs">
+									<li class="nav-item"><a href="#basic-rounded-tab1" class="nav-link rounded-top active" data-toggle="tab">Mappe</a></li>
+									<li class="nav-item"><a href="#basic-rounded-tab2" class="nav-link rounded-top" data-toggle="tab">Inactive</a></li>
+									<li class="nav-item dropdown">
+										<a href="#" class="nav-link rounded-top dropdown-toggle" data-toggle="dropdown">Dropdown</a>
+										<div class="dropdown-menu dropdown-menu-right">
+											<a href="#basic-rounded-tab3" class="dropdown-item" data-toggle="tab">Dropdown tab</a>
+											<a href="#basic-rounded-tab4" class="dropdown-item" data-toggle="tab">Another tab</a>
+										</div>
+									</li>
+								</ul>
+
+								<div class="tab-content">
+									<div class="tab-pane fade active show" id="basic-rounded-tab1">
+										{% include 'volley_seat_manager.html' with seatform=seatform %}
+									</div>
+
+									<div class="tab-pane fade" id="basic-rounded-tab2">
+										Food truck fixie locavore, accusamus mcsweeney's marfa nulla single-origin coffee squid laeggin.
+									</div>
+
+									<div class="tab-pane fade" id="basic-rounded-tab3">
+										DIY synth PBR banksy irony. Leggings gentrify squid 8-bit cred pitchfork. Williamsburg whatever.
+									</div>
+
+									<div class="tab-pane fade" id="basic-rounded-tab4">
+										Aliquip jean shorts ullamco ad vinyl cillum PBR. Homo nostrud organic, assumenda labore aesthet.
+									</div>
+								</div>
+							</div>
+
+				    		 
+
+				    	</div>
+
+					    <div class="tab-pane fade" id="settings">
+
+							<!-- Profile info -->
+							<div class="card">
+								<div class="card-header header-elements-inline">
+									<h5 class="card-title">Profile information</h5>
+									<div class="header-elements">
+										<div class="list-icons">
+					                		<a class="list-icons-item" data-action="collapse"></a>
+					                		<a class="list-icons-item" data-action="reload"></a>
+					                		<a class="list-icons-item" data-action="remove"></a>
+					                	</div>
+				                	</div>
+								</div>
+
+								<div class="card-body">
+									<form action="#">
+										<div class="form-group">
+											<div class="row">
+												<div class="col-md-6">
+													<label>Username</label>
+													<input type="text" value="Eugene" class="form-control">
+												</div>
+												<div class="col-md-6">
+													<label>Full name</label>
+													<input type="text" value="Kopyov" class="form-control">
+												</div>
+											</div>
+										</div>
+
+										<div class="form-group">
+											<div class="row">
+												<div class="col-md-6">
+													<label>Address line 1</label>
+													<input type="text" value="Ring street 12" class="form-control">
+												</div>
+												<div class="col-md-6">
+													<label>Address line 2</label>
+													<input type="text" value="building D, flat #67" class="form-control">
+												</div>
+											</div>
+										</div>
+
+										<div class="form-group">
+											<div class="row">
+												<div class="col-md-4">
+													<label>City</label>
+													<input type="text" value="Munich" class="form-control">
+												</div>
+												<div class="col-md-4">
+													<label>State/Province</label>
+													<input type="text" value="Bayern" class="form-control">
+												</div>
+												<div class="col-md-4">
+													<label>ZIP code</label>
+													<input type="text" value="1031" class="form-control">
+												</div>
+											</div>
+										</div>
+
+										<div class="form-group">
+											<div class="row">
+												<div class="col-md-6">
+													<label>Email</label>
+													<input type="text" readonly="readonly" value="eugene@kopyov.com" class="form-control">
+												</div>
+												<div class="col-md-6">
+						                            <label>Your country</label>
+						                            <select class="form-control form-control-select2" data-fouc>
+						                                <option value="germany" selected>Germany</option> 
+						                                <option value="france">France</option> 
+						                                <option value="spain">Spain</option> 
+						                                <option value="netherlands">Netherlands</option> 
+						                                <option value="other">...</option> 
+						                                <option value="uk">United Kingdom</option> 
+						                            </select>
+												</div>
+											</div>
+										</div>
+
+				                        <div class="form-group">
+				                        	<div class="row">
+				                        		<div class="col-md-6">
+													<label>Phone #</label>
+													<input type="text" value="+99-99-9999-9999" class="form-control">
+													<span class="form-text text-muted">+99-99-9999-9999</span>
+				                        		</div>
+
+												<div class="col-md-6">
+													<label>Upload profile image</label>
+				                                    <input type="file" class="form-input-styled" data-fouc>
+				                                    <span class="form-text text-muted">Accepted formats: gif, png, jpg. Max file size 2Mb</span>
+												</div>
+				                        	</div>
+				                        </div>
+
+				                        <div class="text-right">
+				                        	<button type="submit" class="btn btn-primary">Save changes</button>
+				                        </div>
+									</form>
+								</div>
+							</div>
+							<!-- /profile info -->
+
+
+							<!-- Account settings -->
+							<div class="card">
+								<div class="card-header header-elements-inline">
+									<h5 class="card-title">Account settings</h5>
+									<div class="header-elements">
+										<div class="list-icons">
+					                		<a class="list-icons-item" data-action="collapse"></a>
+					                		<a class="list-icons-item" data-action="reload"></a>
+					                		<a class="list-icons-item" data-action="remove"></a>
+					                	</div>
+				                	</div>
+								</div>
+
+								<div class="card-body">
+									<form action="#">
+										<div class="form-group">
+											<div class="row">
+												<div class="col-md-6">
+													<label>Username</label>
+													<input type="text" value="Kopyov" readonly="readonly" class="form-control">
+												</div>
+
+												<div class="col-md-6">
+													<label>Current password</label>
+													<input type="password" value="password" readonly="readonly" class="form-control">
+												</div>
+											</div>
+										</div>
+
+										<div class="form-group">
+											<div class="row">
+												<div class="col-md-6">
+													<label>New password</label>
+													<input type="password" placeholder="Enter new password" class="form-control">
+												</div>
+
+												<div class="col-md-6">
+													<label>Repeat password</label>
+													<input type="password" placeholder="Repeat new password" class="form-control">
+												</div>
+											</div>
+										</div>
+
+										<div class="form-group">
+											<div class="row">
+												<div class="col-md-6">
+													<label>Profile visibility</label>
+
+													<div class="form-check">
+														<label class="form-check-label">
+															<input type="radio" name="visibility" class="form-input-styled" checked data-fouc>
+															Visible to everyone
+														</label>
+													</div>
+
+													<div class="form-check">
+														<label class="form-check-label">
+															<input type="radio" name="visibility" class="form-input-styled" data-fouc>
+															Visible to friends only
+														</label>
+													</div>
+
+													<div class="form-check">
+														<label class="form-check-label">
+															<input type="radio" name="visibility" class="form-input-styled" data-fouc>
+															Visible to my connections only
+														</label>
+													</div>
+
+													<div class="form-check">
+														<label class="form-check-label">
+															<input type="radio" name="visibility" class="form-input-styled" data-fouc>
+															Visible to my colleagues only
+														</label>
+													</div>
+												</div>
+
+												<div class="col-md-6">
+													<label>Notifications</label>
+
+													<div class="form-check">
+														<label class="form-check-label">
+															<input type="checkbox" class="form-input-styled" checked data-fouc>
+															Password expiration notification
+														</label>
+													</div>
+
+													<div class="form-check">
+														<label class="form-check-label">
+															<input type="checkbox" class="form-input-styled" checked data-fouc>
+															New message notification
+														</label>
+													</div>
+
+													<div class="form-check">
+														<label class="form-check-label">
+															<input type="checkbox" class="form-input-styled" checked data-fouc>
+															New task notification
+														</label>
+													</div>
+
+													<div class="form-check">
+														<label class="form-check-label">
+															<input type="checkbox" class="form-input-styled">
+															New contact request notification
+														</label>
+													</div>
+												</div>
+											</div>
+										</div>
+
+				                        <div class="text-right">
+				                        	<button type="submit" class="btn btn-primary">Save changes</button>
+				                        </div>
+			                        </form>
+								</div>
+							</div>
+							<!-- /account settings -->
+
+				    	</div>
+					</div>
+					<!-- /left content -->
+
+
+					
+				</div>
+				<!-- /inner container -->
+
+			</div>
+			<!-- /content area -->

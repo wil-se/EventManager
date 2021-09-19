@@ -5,8 +5,8 @@ from .views import *
 from django.shortcuts import redirect
 
 urlpatterns = [
-    path('profilo', profile, name='profilo'),
-    path('get-gym-config', get_gym_config, name='get-gym-config'),
-    path('set-gym-config', set_gym_config, name='set-gym-config'),
-       
+    path('profilo', profile, name='profile'),
+    path('get-canvas-config', get_canvas_config, name='get-canvas-config'),
+    path('set-canvas-config', set_canvas_config, name='set-canvas-config'),
+    
 ]

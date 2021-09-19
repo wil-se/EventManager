@@ -26,10 +26,10 @@ urlpatterns = [
     path('', include('dashboard.urls')),
     path('', include('reservation.urls')),
     path('', include('authentication.urls')),
+    path('', include('volley.urls')),
     
 ]
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
-print(urlpatterns)
