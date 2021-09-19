@@ -94,15 +94,7 @@ WSGI_APPLICATION = 'eventmanager.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'sportmanager',
-        'USER': 'sportmanager',
-        'PASSWORD': 'sportmanager',
-        'HOST': '127.0.0.1',
-    }
-}
+
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
