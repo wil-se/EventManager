@@ -8,12 +8,16 @@ role_choices = (
       (1, 'manager'),
       (2, 'customer'),
       (3, 'volleymanager'),
-      (3, 'volleycoach'),
+      (4, 'volleycoach'),
+      (5, 'volleyplayer'),
+      
     )
 
 
 class User(AbstractUser):
     role = models.PositiveSmallIntegerField(choices=role_choices, default=2)    
+    can_create_user = models.BooleanField(default=False)
+    
     def __str__(self):
         if self.first_name and self.last_name:
             return '{} {}'.format(self.first_name, self.last_name)

@@ -120,81 +120,66 @@ def set_canvas_config(request):
     return JsonResponse({})
 
 
-"""
-from .models import ThemeConfig, GymConfig
-from reservation.models import Reservation, SeatGymConfig, Seat
-from reservation.forms import SeatForm
 
-import json
+@login_required(login_url='/accounts/login/')
+def add_user(request):
+
+
+    return main_render(request, page='add_user.html', data={})
 
 
 
 @login_required(login_url='/accounts/login/')
-def profile(request):
-    reservations = Reservation.objects.filter(user=request.user)
-    seatform = SeatForm()
-    gymconfig = GymConfig.objects.all().first()
-
-    return main_render(request, page="profile.html", data={
-        'reservations': reservations,
-        'seatform': seatform,
-        'gymconfig': gymconfig,
-    })
-
-
-@login_required(login_url='/accounts/login/')
-def get_gym_config(request):
-    # gymconfig = GymConfig.objects.get(pk=request.POST.get('gymconfigid', ''))
-    gymconfig = GymConfig.objects.all().first()
-    seatconfig = SeatGymConfig.objects.filter(gym=gymconfig)
-
-
-    data = {'seats':{}}
-    data['width_space'] = gymconfig.width_space
-    data['height_space'] = gymconfig.height_space
-    data['width_field'] = gymconfig.width_field
-    data['height_field'] = gymconfig.height_field
-    data['seat_radius'] = gymconfig.seat_radius
-    data['left_field'] = gymconfig.left_field
-    data['top_field'] = gymconfig.top_field
-    
-
-    for seat in seatconfig:
-        print(seat.pk)
-        print(seat)
-        data['seats'][seat.seat.name] = [seat.left, seat.top]
-
-    return JsonResponse(data)
-
-@login_required(login_url='/accounts/login/')
-def set_gym_config(request):
-    # id = request.data.get('id', None)
-    data = json.loads(list(request.POST.keys())[0])
-
-    gymconfig = GymConfig.objects.all().first()
-    gymconfig.width_space = data.get('width_space', 1600)
-    gymconfig.height_space = data.get('height_space', 800)
-    gymconfig.width_field = data.get('width_field', 800)
-    gymconfig.height_field = data.get('height_field', 400)
-    gymconfig.seat_radius = data.get('seat_radius', 60)
-    
-    gymconfig.left_field = data.get('left_field', 200)
-    gymconfig.top_field = data.get('top_field', 200)
-    
-    gymconfig.save()
-
-    for seatid in data['seats'].keys():
-        seatconf = SeatGymConfig.objects.filter(gym=gymconfig, seat__pk=seatid).first()
+def save_user(request):
+    if (request.user.role < 2 or request.user.is_superuser):
+        username = request.POST.get('username', '')
+        name = request.POST.get('name', '')
+        last_name = request.POST.get('last_name', '')
+        password = request.POST.get('password', '')
+        password_two = request.POST.get('password_two', '')
+        email = request.POST.get('email', '')
+        email_two = request.POST.get('email_two', '')
+        role = request.POST.get('role', '')
         
-        if not seatconf:
-            seatconf = SeatGymConfig()
-            seat = Seat.objects.get(pk=seatid)
-            seatconf.seat = seat
-            seatconf.gym = gymconfig
+        if not username or not name or not last_name or not password_two or not password_two or not email or not email_two:
+            print("check 0")
+            return JsonResponse({'success': False, 'message': "Sono richiesti tutti i campi"})    
 
-        seatconf.left = data['seats'][seatid][0]
-        seatconf.top = data['seats'][seatid][1]
-        seatconf.save()
+
+        # controlla password uguali
+        if password != password_two:
+            print("check 1")
+            return JsonResponse({'success': False, 'message': "Le password non coincidono"})    
+
+        # controlla email uguali
+        if email != email_two:
+            print("check 2")
+            return JsonResponse({'success': False, 'message': "Le email non coincidono"})    
+            
+        # controlla email già esistente
+        if User.objects.filter(email=email).exists():
+            print("email già presente")
+            return JsonResponse({'success': False, 'message': "Email già presente"})    
         
-    return JsonResponse({})
-"""
+
+        newuser = User.objects.create_user(username, email, password)
+        newuser.first_name = name
+        newuser.last_name = last_name
+
+        # if role == "Admin":
+        #     newuser.role = 0
+        if role == "Manager":
+            newuser.role = 1
+        # if role == "Customer":
+        #     newuser.role = 2
+        if role == "Manager palestra":
+            newuser.role = 3
+        if role == "Allenatorqe":
+            newuser.role = 4
+        if role == "Giocatore":
+            newuser.role = 5
+
+        newuser.save()
+
+
+        return JsonResponse({'success': True})
