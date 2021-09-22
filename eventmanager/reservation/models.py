@@ -84,9 +84,11 @@ class Event(models.Model):
     place = models.ForeignKey('reservation.Place', on_delete=models.CASCADE)
     title = models.CharField(max_length=64)
     date = models.DateTimeField(default=None)
+    placeconfig = models.ForeignKey('reservation.PlaceConfig', default=None, on_delete=models.SET_DEFAULT)
 
     def __str__(self):
          return f'{self.place} // {self.date.strftime("%d/%m%Y")}'
+
 
 
 class Reservation(models.Model):

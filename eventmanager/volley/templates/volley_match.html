@@ -40,11 +40,29 @@
 									<h5  style="text-align: center;">Posti liberi rimanenti: {{ free_seats }}</h5>
 
 								</div>
+
+																<div id="map" style="margin: 20px 0px;"></div>
+
+
+								<div class="row">
+	<div class="col-md-12">
+	    <!-- Basic -->
+	    <div class="card" style="background: #ffffff; overflow-x: scroll;">
+	    	<div class="card-header header-elements-inline" style="background: #ffffff;">
+	    		<h5 class="card-title">Posti a sedere</h5>
+	    	</div>
+
+			<div class="card-body flex" id="draggable-default-container"  style="background: #ffffff;">
+			</div>
+		</div>
+		<!-- /basic -->
+	</div>
+</div>
+
 								<div class="row" >
 								<div class="col text-center" style="margin: 20px 20px;">
 								<a href="{% url 'volley_match' id=match.pk %}" type="button" class="btn bg-green-400 btn-float"><i class="fas fa-volleyball-ball mr-3 fa-2x spinner" style="margin-left: 20px;"></i> <span>Prenota</span></a>
 								</div>	
-								<div id="map" style="margin: 20px 0px;"></div>
 								
 								</div>	
 
@@ -52,13 +70,39 @@
 						</div>
 						<!-- /post -->
 
+
+	            <!-- Basic modal -->
+				<div id="modal-reservation" class="modal fade" tabindex="-1">
+					<div id="seatid" style="display: none;"></div>
+
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h5 class="modal-title">Prenotazione posto</h5>
+								<button type="button" class="close" data-dismiss="modal">&times;</button>
+							</div>
+
+							<div class="modal-body">
+								<h6 class="font-weight-semibold" id="modal-title"></h6>
+								
+							</div>
+
+							<div class="modal-footer">
+								<button type="button" class="btn btn-link" data-dismiss="modal">Chiudi</button>
+								<a id="reserve-match" type="button" class="btn bg-green-400 btn-float"><i class="fas fa-volleyball-ball mr-3 fa-2x spinner" style="margin-left: 20px;"></i> <span>Prenota</span></a>	
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- /basic modal -->
+
 <script>
 
 
 $(function() {
 	console.log()
 	let mapOptions = {
-    center:["{{ match.gym.longitude|floatformat:3 }}".replace(",", "."), "{{ match.gym.latitude|floatformat:3 }}".replace(",", ".")],
+    center:["{{ match.place.longitude|floatformat:3 }}".replace(",", "."), "{{ match.place.latitude|floatformat:3 }}".replace(",", ".")],
     zoom: 13,
 	}
 	
@@ -68,11 +112,88 @@ $(function() {
 	let layer = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
 	map.addLayer(layer);
 
-	let marker = new L.Marker(["{{ match.gym.longitude|floatformat:3 }}".replace(",", "."), "{{ match.gym.latitude|floatformat:3 }}".replace(",", ".")]);
+	let marker = new L.Marker(["{{ match.place.longitude|floatformat:3 }}".replace(",", "."), "{{ match.place.latitude|floatformat:3 }}".replace(",", ".")]);
 	marker.addTo(map);
 
 	map.invalidateSize()
+
+
+
+	$.ajax({
+        headers: {'X-CSRFToken': '{{ csrf_token }}'},
+        type: "GET",
+        url: "/get-match-data",
+        data: {
+			'match_id': '{{ match.pk }}',
+		},
+        success: function(data){ 
+            console.log(data);
+			
+			document.getElementById('draggable-default-container').setAttribute("style","width:"+data['canvas_width']+"px; height: "+data['canvas_height']+"px; position: relative; padding: 0px 0px;");
+			
+			var free_seats = data['free_seats'];
+            for (const [key, value] of Object.entries(free_seats)) {
+                $('#draggable-default-container').append('<div onclick="show_reservation_modal('+key+',\''+free_seats[key][0]+'\')\" id="seat_' + key +'" class=\"jqueryui-demo-element text-center mx-auto mx-sm-0 rounded-round\" style="cursor: pointer; width:'+free_seats[key][3]+'px; height: '+free_seats[key][3]+'px; left: '+free_seats[key][1]+'px; top: '+free_seats[key][2]+'px; position: absolute;"><span>' + free_seats[key][0] + '</span></div>');
+            }
+			
+			var reserved_seats = data['reserved_seats'];
+            for (const [key, value] of Object.entries(reserved_seats)) {
+                $('#draggable-default-container').append('<div id="seat_' + key +'" class=\"jqueryui-demo-element text-center mx-auto mx-sm-0 rounded-round\" style="width:'+reserved_seats[key][3]+'px; height: '+reserved_seats[key][3]+'px; left: '+reserved_seats[key][1]+'px; top: '+reserved_seats[key][2]+'px; position: absolute;"><span>' + reserved_seats[key][0] + '</span></div>');
+            }
+
+			var shapes = data['shapes'];
+            for (const [key, value] of Object.entries(data['shapes'])) {
+                $('#draggable-default-container').append('<div id="shape_' + key +'" class=\"jqueryui-demo-element draggable-element text-center mx-auto mx-sm-0 ui-draggable ui-draggable-handle\" style="width:'+value[3]+'px; height: '+value[4]+'px; left: '+value[1]+'px; top: '+value[2]+'px; position: absolute; background: #00000047; z-index: 9;"><span>' + shapes[key][0] + '</span></div>');
+            }
+			
+        },
+        failure: function(data){
+            console.log("FAIL");
+        },
+    });
+
+
+
 })
+
+function show_reservation_modal(id, name){
+	$('#modal-reservation').modal({
+        show: true,
+    }); 
+	$('#modal-title').append("Prenotare posto " + name + "?")
+	$('#seatid').append(id)
+	
+}
+
+$('#modal-reservation').on('hidden.bs.modal', function () {
+  $('#modal-title').empty();
+  $('#seatid').empty();
+})
+
+
+$('#reserve-match').click(function(){
+	var id = $('#seatid').text();
+	$.ajax({
+        headers: {'X-CSRFToken': '{{ csrf_token }}'},
+        type: "POST",
+        url: "/reserve-volley-match",
+        data: {
+			'seat_id': id,
+			'match_id': '{{ match.pk }}', 
+		},
+        success: function(data){ 
+            console.log(data);
+			
+			
+        },
+        failure: function(data){
+            console.log("FAIL");
+        },
+    });
+})
+
+
+
  </script>
 
 <style>

@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from authentication.views import main_render
 import datetime
 from .forms import SearchForm
+from reservation.models import *
 
 
 @login_required(login_url='/accounts/login/')
@@ -24,6 +25,18 @@ def overview(request):
         'end_date': end_date.strftime('%d/%m/%Y'),
         'form': form,
         })
+
+
+@login_required(login_url='/accounts/login/')
+def my_reservations(request):
+    reservations = Reservation.objects.filter(customer=request.user)
+    print(reservations)
+    return main_render(request, page='my_reservations.html', data={
+        'reservations': reservations,
+        })
+
+
+
 
 """
 from reservation.models import Team, Match, Gym, Reservation

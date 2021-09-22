@@ -2,52 +2,40 @@
 
 
 <div class="row">
-					<div class="col-md-12">
-
-						<!-- Basic -->
-						<div class="card">
-
-
-							<div class="card-body">
-                                <div>
-                                    {{ seatform.canvases|addclass:'form-control' }}
-                                    {{ seatform.canvas_width|addclass:'form-control' }}
-                                    {{ seatform.canvas_height|addclass:'form-control' }}
-                                    {{ seatform.seats|addclass:'form-control' }}
-                                    {{ seatform.shapes|addclass:'form-control' }}
-                                    
-                                    <a id="save" class="btn btn-success">Salva</a>
-                                </div>
-							</div>
+	<div class="col-md-12">
+		<div class="card">
+			<div class="card-body">
+                <div>
+                    {{ seatform.canvases|addclass:'form-control' }}
+                    {{ seatform.canvas_width|addclass:'form-control' }}
+                    {{ seatform.canvas_height|addclass:'form-control' }}
+                    {{ seatform.seats|addclass:'form-control' }}
+                    {{ seatform.shapes|addclass:'form-control' }}    
+                    <a id="save" class="btn btn-success">Salva</a>
+                </div>
+			</div>
+        </div>
+	</div>
+</div>
 
 
-						</div>
-						<!-- /basic -->
 
-					</div>
 
-				</div>
 <div class="row">
-					<div class="col-md-12">
+	<div class="col-md-12">
+	    <!-- Basic -->
+	    <div class="card" style="background: #ffffff; overflow-x: scroll;">
+	    	<div class="card-header header-elements-inline" style="background: #ffffff;">
+	    		<h5 class="card-title">Posti a sedere</h5>
+	    	</div>
 
-						<!-- Basic -->
-						<div class="card" style="background: #ffffff; overflow-x: scroll;">
-							<div class="card-header header-elements-inline" style="background: #ffffff;">
-								<h5 class="card-title">Posti a sedere</h5>
-							</div>
-
-							<div class="card-body flex" id="draggable-default-container"  style="background: #ffffff;">
-                                    {% comment %} <div id="field" style="background: #000000; margin: auto auto;" class="jqueryui-demo-element seat draggable-element text-center mx-auto mx-sm-0 ui-draggable ui-draggable-handle">     {% endcomment %}
-                                
-								
-							</div>
-							</div>
-						</div>
-						<!-- /basic -->
-
-					</div>
-
-				</div>
+			<div class="card-body flex" id="draggable-default-container"  style="background: #ffffff;">
+                    {% comment %} <div id="field" style="background: #000000; margin: auto auto;" class="jqueryui-demo-element seat draggable-element text-center mx-auto mx-sm-0 ui-draggable ui-draggable-handle"></div>     {% endcomment %}	
+			</div>
+		</div>
+		<!-- /basic -->
+	</div>
+</div>
 
 
 <script>

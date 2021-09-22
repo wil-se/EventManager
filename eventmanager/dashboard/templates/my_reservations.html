@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% load filters %}
+
+
+{% block import %}
+{% endblock %}
+    {% for reservation in reservations %}
+
+    <div class="card">
+        {{ reservation }}
+    </div>
+    {% endfor %}
+
+{% block content %}
+
+
+<script>
+
+  $(function() {});
+
+</script>
+{% endblock %}
