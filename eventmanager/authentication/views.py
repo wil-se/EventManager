@@ -27,8 +27,7 @@ def main_render(request, page='overview.html', data={}):
 
 @login_required(login_url='/accounts/login/')
 def profile(request):
-    
-    
+
     return render_volley_manager_profile(request)
     
 
@@ -188,16 +187,18 @@ def save_user(request):
         return JsonResponse({'success': False, 'message': "Email già presente"})    
         
 
-    newuser = User.objects.create_user(username, email, password)
-    newuser.first_name = name
-    newuser.last_name = last_name
-
     if role == "Admin":
-        newuser.role = 0
+        admin = User.objects.create_user(username, email, password)
+        admin.first_name = name
+        admin.last_name = last_name
+        admin.save()
+        print(admin)
+
     if role == "Manager":
-        newuser.role = 1
-        
-    newuser.save()
-    print(newuser)
+        manager = VolleyManager.objects.create_user(username, email, password)
+        manager.first_name = name
+        manager.last_name = last_name
+        manager.save()
+        print(manager)
 
     return JsonResponse({'success': True})
