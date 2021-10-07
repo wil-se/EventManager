@@ -13,7 +13,7 @@ import json
 def main_render(request, page='overview.html', data={}):
     themeconfig = ""
     try:
-        ThemeConfig.objects.filter(user=request.user)[0]
+        themeconfig = ThemeConfig.objects.filter(user=request.user)[0]
     except:
         themeconfig = ThemeConfig()
         themeconfig.name = "default generated"
