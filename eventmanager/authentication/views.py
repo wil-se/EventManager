@@ -12,6 +12,11 @@ import json
 @login_required(login_url='/accounts/login/')
 def main_render(request, page='overview.html', data={}):
     themeconfig = ThemeConfig.objects.filter(user=request.user)[0]
+    if not themeconfig:
+        themeconfig = ThemeConfig()
+        themeconfig.user = request.user
+        themeconfig.save()
+
     return render(request, page, {**{
         'theme': themeconfig,
     }, **data})
