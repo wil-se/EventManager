@@ -124,20 +124,30 @@
 	function(){
 		console.log('bella');
 		var role = document.getElementById("role");
+		data = {
+				'username': document.getElementById("username").value,
+				'name': document.getElementById("name").value,
+				'last_name': document.getElementById("lastname").value,
+				'password': document.getElementById("password").value,
+				'password_two': document.getElementById("password_two").value,
+				'email': document.getElementById("email").value,
+				'email_two': document.getElementById("email_two").value,
+				'role': role.options[role.selectedIndex].text,
+			 },
+		console.log(data);
 		$.ajax({
             headers: {'X-CSRFToken': '{{ csrf_token }}'},
             type: "POST",
             url: '/save-user',
             data: {
-			//	'username': document.getElementById("username").value,
-			// 	'name': document.getElementById("name").value,
-			//	'last_name': document.getElementById("lastname").value,
-			//	'password': document.getElementById("password").value,
-			//	'password_two': document.getElementById("password_two").value,
-			//	'email': document.getElementById("email").value,
-			//	'email_two': document.getElementById("email_two").value,
-			//	'sieltename': document.getElementById("sieltename").value,
-			//	'role': role.options[role.selectedIndex].text,
+				'username': document.getElementById("username").value,
+				'name': document.getElementById("name").value,
+				'last_name': document.getElementById("lastname").value,
+				'password': document.getElementById("password").value,
+				'password_two': document.getElementById("password_two").value,
+				'email': document.getElementById("email").value,
+				'email_two': document.getElementById("email_two").value,
+				'role': role.options[role.selectedIndex].text,
 			 },
             success: function(data){
                 console.log('success');

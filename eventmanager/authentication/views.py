@@ -123,63 +123,73 @@ def set_canvas_config(request):
 
 @login_required(login_url='/accounts/login/')
 def add_user(request):
-
-
     return main_render(request, page='add_user.html', data={})
 
 
 
 @login_required(login_url='/accounts/login/')
 def save_user(request):
-    if (request.user.role < 2 or request.user.is_superuser):
-        username = request.POST.get('username', '')
-        name = request.POST.get('name', '')
-        last_name = request.POST.get('last_name', '')
-        password = request.POST.get('password', '')
-        password_two = request.POST.get('password_two', '')
-        email = request.POST.get('email', '')
-        email_two = request.POST.get('email_two', '')
-        role = request.POST.get('role', '')
-        
-        if not username or not name or not last_name or not password_two or not password_two or not email or not email_two:
-            print("check 0")
-            return JsonResponse({'success': False, 'message': "Sono richiesti tutti i campi"})    
+    username = request.POST.get('username', '')
+    name = request.POST.get('name', '')
+    last_name = request.POST.get('last_name', '')
+    password = request.POST.get('password', '')
+    password_two = request.POST.get('password_two', '')
+    email = request.POST.get('email', '')
+    email_two = request.POST.get('email_two', '')
+    role = request.POST.get('role', '')
+    print(username)
+    txt = "\
+        USERNAME: {}\n\
+        NAME: {}\n\
+        LAST_NAME: {}\n\
+        PASSWORD1: {}\n\
+        PASSWORD2 {}\n\
+        SHUT UP! \n\
+        EMAIL1: {}\n\
+        EMAIL2: {}\n\
+        ROLE: {}\n\
+    ".format(username, name, last_name, password, password_two, email, email_two, role)
+    
+    print(txt)
 
 
-        # controlla password uguali
-        if password != password_two:
-            print("check 1")
-            return JsonResponse({'success': False, 'message': "Le password non coincidono"})    
+    if not username \
+        or not name \
+        or not last_name \
+        or not password_two \
+        or not password_two \
+        or not email \
+        or not email_two:
+        print("check 0")
+        return JsonResponse({'success': False, 'message': "Sono richiesti tutti i campi"})    
 
-        # controlla email uguali
-        if email != email_two:
-            print("check 2")
-            return JsonResponse({'success': False, 'message': "Le email non coincidono"})    
+
+    # controlla password uguali
+    if password != password_two:
+        print("check 1")
+        return JsonResponse({'success': False, 'message': "Le password non coincidono"})    
+
+    # controlla email uguali
+    if email != email_two:
+        print("check 2")
+        return JsonResponse({'success': False, 'message': "Le email non coincidono"})    
             
-        # controlla email già esistente
-        if User.objects.filter(email=email).exists():
-            print("email già presente")
-            return JsonResponse({'success': False, 'message': "Email già presente"})    
+    # controlla email già esistente
+    if User.objects.filter(email=email).exists():
+        print("email già presente")
+        return JsonResponse({'success': False, 'message': "Email già presente"})    
         
 
-        newuser = User.objects.create_user(username, email, password)
-        newuser.first_name = name
-        newuser.last_name = last_name
+    newuser = User.objects.create_user(username, email, password)
+    newuser.first_name = name
+    newuser.last_name = last_name
 
-        # if role == "Admin":
-        #     newuser.role = 0
-        if role == "Manager":
-            newuser.role = 1
-        # if role == "Customer":
-        #     newuser.role = 2
-        if role == "Manager palestra":
-            newuser.role = 3
-        if role == "Allenatorqe":
-            newuser.role = 4
-        if role == "Giocatore":
-            newuser.role = 5
+    if role == "Admin":
+        newuser.role = 0
+    if role == "Manager":
+        newuser.role = 1
+        
+    newuser.save()
+    print(newuser)
 
-        newuser.save()
-
-
-        return JsonResponse({'success': True})
+    return JsonResponse({'success': True})
